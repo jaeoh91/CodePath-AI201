@@ -10,7 +10,7 @@ This repository contains my project files and assignments for CodePath's AI201 A
 - **Tech Stack**: Python, ChromaDB, Gemini/Groq APIs
 - **Key Features**:
   - Document ingestion and chunking
-  - Vector-based semantic search
+  - Vector-DB based semantic search
   - Context-aware response generation
 - **Datasets**: 8 board games (Catan, Clue, Codenames, Monopoly, Pandemic, Risk, Ticket to Ride, UNO)
 
