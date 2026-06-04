@@ -40,7 +40,7 @@ def embed_and_store(chunks):
     """
     _collection.add(
         documents=[c["text"] for c in chunks],
-        metadatas=[{"game": c["game"]} for c in chunks],
+        metadatas=[{"game": c["game"], "filename": c.get("filename", "unknown")} for c in chunks],
         ids=[c["chunk_id"] for c in chunks],
     )
     print(f"Stored {_collection.count()} total chunks in the vector database.")
@@ -87,6 +87,7 @@ def retrieve(query, n_results=N_RESULTS):
         formatted_results.append({
             "text": text,
             "game": meta["game"],
+            "filename": meta.get("filename", "unknown"),
             "distance": dist
         })
 

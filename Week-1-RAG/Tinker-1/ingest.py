@@ -20,7 +20,7 @@ def load_documents():
     return documents
 
 
-def chunk_document(text, game_name):
+def chunk_document(text, game_name, filename):
     """
     Split a rule document into chunks ready for embedding.
 
@@ -59,6 +59,7 @@ def chunk_document(text, game_name):
             chunks.append({
                 "text": chunk_text,
                 "game": game_name,
+                "filename": filename,
                 "chunk_id": f"{prefix}_{counter}",
             })
             counter += 1
