@@ -4,3 +4,6 @@
 [submodule "Week-2/Project-2"]
 	path = Week-2/Project-2
 	url = https://github.com/jaeoh91/AI201-Project2
+[submodule "Week-3/Project-3"]
+	path = Week-3/Project-3
+	url = https://github.com/jaeoh91/AI201-Project-3
