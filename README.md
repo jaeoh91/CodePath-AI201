@@ -26,6 +26,18 @@ This README contains a high-level overview, open each project's README for archi
 | **Technical concepts** | Structure-aware HTML scraping (tag-by-tag to preserve heading/paragraph boundaries) · recursive character chunking with orphaned-heading post-processing · cosine distance threshold gating · citation injection via `Source` + `URL` chunk headers · grounded system prompt with strict refusal fallback · retrieval tracing & failure case analysis (AVR exception miss, chunk boundary gap) |
 | **Stack** | Python 3.12 · ChromaDB · `sentence-transformers` (`all-MiniLM-L6-v2`) · Groq / `llama-3.3-70b-versatile` · `langchain-text-splitters` · Gradio |
 
+### `Week-3`: Fine-Tuned Text Classification
+
+#### `Project-3` : [TakeMeter](./Week-3/Project-3/)
+
+| | |
+|---|---|
+| **About** | Fine-tuned DistilBERT classifier that labels Hacker News comments as `technical_insight`, `opinion_or_critique`, or `joke_or_meta`, with a zero-shot LLaMA-3.3-70B baseline for comparison and a Gradio web UI for live classification |
+| **Technical concepts** | Fine-tuning `distilbert-base-uncased` for 3-class sequence classification · stratified train/val/test split (70/15/15) · class-weighted cross-entropy loss via custom `WeightedTrainer` · β-sweep for weight-strength selection on validation macro-F1 · `load_best_model_at_end` with macro-F1 as model-selection metric · zero-shot baseline (LLaMA-3.3-70B, Groq API) · complementarity analysis (same accuracy, only 13/30 shared predictions) · dataset curation: label audit, 7 dropped no-fit rows, 16 synthetic boundary examples (train-only) |
+| **Stack** | Python 3.12 · HuggingFace Transformers + `distilbert-base-uncased` · Groq / `llama-3.3-70b-versatile` (baseline) · scikit-learn · uv · Gradio |
+
+---
+
 ### `Week-2`: Multi-Tool Agents
 
 #### `Lab-2` : [Plant Advisor](./Week-2/Lab-2/)
@@ -70,9 +82,12 @@ CodePath AI201/
 │   ├── Lab-1/        # RulesBot — production-ready RAG
 │   └── Project-1/    # GT F-1 Visa Policy Assistant — domain RAG with citations
 │
-└── Week-2/
-    ├── Lab-2/        # Plant Advisor — multi-tool agent
-    └── Project-2/    # FitFindr — thrift-shopping planning-loop agent
+├── Week-2/
+│   ├── Lab-2/        # Plant Advisor — multi-tool agent
+│   └── Project-2/    # FitFindr — thrift-shopping planning-loop agent
+│
+└── Week-3/
+    └── Project-3/    # TakeMeter — Hacker News discourse classifier (fine-tuned DistilBERT)
 ```
 
 ---
