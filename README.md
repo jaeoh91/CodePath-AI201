@@ -26,18 +26,6 @@ This README contains a high-level overview, open each project's README for archi
 | **Technical concepts** | Structure-aware HTML scraping (tag-by-tag to preserve heading/paragraph boundaries) · recursive character chunking with orphaned-heading post-processing · cosine distance threshold gating · citation injection via `Source` + `URL` chunk headers · grounded system prompt with strict refusal fallback · retrieval tracing & failure case analysis (AVR exception miss, chunk boundary gap) |
 | **Stack** | Python 3.12 · ChromaDB · `sentence-transformers` (`all-MiniLM-L6-v2`) · Groq / `llama-3.3-70b-versatile` · `langchain-text-splitters` · Gradio |
 
-### `Week-3`: Fine-Tuned Text Classification
-
-#### `Project-3` : [TakeMeter](./Week-3/Project-3/)
-
-| | |
-|---|---|
-| **About** | Fine-tuned DistilBERT classifier that labels Hacker News comments as `technical_insight`, `opinion_or_critique`, or `joke_or_meta`, with a zero-shot LLaMA-3.3-70B baseline for comparison and a Gradio web UI for live classification |
-| **Technical concepts** | Fine-tuning `distilbert-base-uncased` for 3-class sequence classification · stratified train/val/test split (70/15/15) · class-weighted cross-entropy loss via custom `WeightedTrainer` · β-sweep for weight-strength selection on validation macro-F1 · `load_best_model_at_end` with macro-F1 as model-selection metric · zero-shot baseline (LLaMA-3.3-70B, Groq API) · complementarity analysis (same accuracy, only 13/30 shared predictions) · dataset curation: label audit, 7 dropped no-fit rows, 16 synthetic boundary examples (train-only) |
-| **Stack** | Python 3.12 · HuggingFace Transformers + `distilbert-base-uncased` · Groq / `llama-3.3-70b-versatile` (baseline) · scikit-learn · uv · Gradio |
-
----
-
 ### `Week-2`: Multi-Tool Agents
 
 #### `Lab-2` : [Plant Advisor](./Week-2/Lab-2/)
@@ -56,6 +44,61 @@ This README contains a high-level overview, open each project's README for archi
 | **Technical concepts** | Gated linear planning loop with early-return branch on empty search results · session state management (pure tools, state threaded through a single shared dict) · LLM query parsing with regex fallback for offline resilience · keyword-ranked listing search · tool isolation (each tool is a pure function — no session coupling) |
 | **Stack** | Python 3.12 · Groq / `llama-3.3-70b-versatile` (query parsing, outfit suggestion, fit-card generation) · mock JSON dataset (40 listings + wardrobe) · pytest (offline tool tests with Groq stub) · Gradio |
 
+---
+
+### `Week-3`: Fine-Tuned Text Classification
+
+#### `Project-3` : [TakeMeter](./Week-3/Project-3/)
+
+| | |
+|---|---|
+| **About** | Fine-tuned DistilBERT classifier that labels Hacker News comments as `technical_insight`, `opinion_or_critique`, or `joke_or_meta`, with a zero-shot LLaMA-3.3-70B baseline for comparison and a Gradio web UI for live classification |
+| **Technical concepts** | Fine-tuning `distilbert-base-uncased` for 3-class sequence classification · stratified train/val/test split (70/15/15) · class-weighted cross-entropy loss via custom `WeightedTrainer` · β-sweep for weight-strength selection on validation macro-F1 · `load_best_model_at_end` with macro-F1 as model-selection metric · zero-shot baseline (LLaMA-3.3-70B, Groq API) · complementarity analysis (same accuracy, only 13/30 shared predictions) · dataset curation: label audit, 7 dropped no-fit rows, 16 synthetic boundary examples (train-only) |
+| **Stack** | Python 3.12 · HuggingFace Transformers + `distilbert-base-uncased` · Groq / `llama-3.3-70b-versatile` (baseline) · scikit-learn · uv · Gradio |
+
+---
+
+### `Week-4`: AI-Content Detection Backend
+
+#### `Project-4` : [Provenance Guard](./Week-4/Project-4/)
+
+| | |
+|---|---|
+| **About** | Flask backend that classifies submitted creative text as likely AI-generated, likely human-written, or uncertain — with confidence scoring, a transparency label, an appeals workflow, rate limiting, and a structured audit log |
+| **Technical concepts** | Dual-signal detection (sentence-length-variation "burstiness" + MATTR lexical diversity/stock-phrase heuristic) that decides the label, plus a third LLM-read signal kept advisory-only so the core score stays deterministic · disagreement axis (`abs(signal_1 - signal_2)`) separating genuine middle-ground from conflicting evidence · ordered banding rule (guard fired → disagreement too high → mean bands) · rate limiting via Flask-Limiter (10/min, 100/day) · appeals workflow (file → reviewer queue → resolve) reusing the submission store · structured JSONL audit logging · calibration against a hand-labeled fixture set that surfaced a counter-intuitive result (MATTR ran backwards vs. the original hypothesis on modern LLM output) |
+| **Stack** | Python 3.11+ · Flask · Flask-Limiter · Groq / `llama-3.3-70b-versatile` (advisory signal) · uv · pytest |
+
+---
+
+### `Week-5`: Debugging a Flask + SQLAlchemy Service
+
+#### `Lab-5` : [BookClub](./Week-5/Lab-5/)
+
+| | |
+|---|---|
+| **About** | Reading-list starter app where club members track books, log reading progress, and view stats (streak, books finished this month, total pages read) |
+| **Technical concepts** | Flask app-factory pattern · SQLAlchemy models & relationships (`User`, `Book`, `ReadingEvent`) · thin routes / service-layer separation · streak and aggregate-stats calculation over event history |
+| **Stack** | Python · Flask · Flask-SQLAlchemy · SQLite |
+
+#### `Project-5` : [Mixtape Bug Hunt](./Week-5/Project-5/)
+
+| | |
+|---|---|
+| **About** | Debugging exercise on a Flask + SQLAlchemy social music API (share songs, build playlists, track listening streaks) — reproduced, root-caused, and fixed all five reported service-layer bugs with one conventional commit per fix and full RCA write-ups |
+| **Technical concepts** | Bug reproduction discipline (symptom → route → service → root cause) before editing · SQLAlchemy query literacy (join-caused row multiplication, ORM uniquing vs. raw row counts) · calendar/streak and recency-window boundary reasoning (off-by-one and cutoff bugs) · intentional side effects (notifications on write paths) · pytest regression coverage per fix (13 passing) · RCA-style technical writing |
+| **Stack** | Python · Flask · Flask-SQLAlchemy · pytest · SQLite |
+
+---
+
+### `Week-6`: Simulated Open-Source Code Review
+
+#### `Project-6` : [CineLog](./Week-6/Project-6/)
+
+| | |
+|---|---|
+| **About** | Flask + SQLAlchemy film-tracking API (collection + watchlist); simulated an open-source contribution by taking a half-finished watchlist feature through maintainer review feedback, a UUID-migration rebase, commit-history cleanup, and a merge to `main` |
+| **Technical concepts** | Responding to real code-review feedback (naming conventions, duplicate-entry protection, test coverage, design tradeoffs) · rebasing a feature branch onto a moving `main` and resolving conflicts · interactive rebase (`reword`/`edit`/split) with `--force-with-lease` · service-layer design decisions owned and documented (default visibility, sort order) · pytest fixtures over in-memory SQLite, including error-path assertions |
+| **Stack** | Python 3.14 · Flask · Flask-SQLAlchemy · pytest · SQLite |
 
 ---
 
@@ -86,8 +129,18 @@ CodePath AI201/
 │   ├── Lab-2/        # Plant Advisor — multi-tool agent
 │   └── Project-2/    # FitFindr — thrift-shopping planning-loop agent
 │
-└── Week-3/
-    └── Project-3/    # TakeMeter — Hacker News discourse classifier (fine-tuned DistilBERT)
+├── Week-3/
+│   └── Project-3/    # TakeMeter — Hacker News discourse classifier (fine-tuned DistilBERT)
+│
+├── Week-4/
+│   └── Project-4/    # Provenance Guard — AI-content detection backend
+│
+├── Week-5/
+│   ├── Lab-5/        # BookClub — Flask + SQLAlchemy reading tracker
+│   └── Project-5/    # Mixtape Bug Hunt — service-layer debugging exercise
+│
+└── Week-6/
+    └── Project-6/    # CineLog — simulated OSS code review (watchlist feature)
 ```
 
 ---
