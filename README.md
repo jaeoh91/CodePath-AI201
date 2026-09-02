@@ -4,6 +4,8 @@ Projects from [CodePath AI201](https://www.codepath.org/): a hands-on course in 
 
 This README contains a high-level overview, open each project's README for architecture, technical decisions, and runnable demos.
 
+> **Course completed — September 2026.** 7 weeks · 7 projects · full stack covered: RAG pipelines → multi-tool agents → fine-tuning → detection backends → service-layer debugging → simulated OSS code review → AI safety red-teaming.
+
 ---
 
 ## Projects
@@ -102,6 +104,18 @@ This README contains a high-level overview, open each project's README for archi
 
 ---
 
+### `Week-7`: AI Safety Red-Teaming (Tier 3 OSS Contribution)
+
+#### `Project-7` : [PathReview — Prompt Injection Red-Team Suite](./Week-7/Project-7/)
+
+| | |
+|---|---|
+| **About** | Tier 3 open-source contribution to [ascherj/pathreview](https://github.com/ascherj/pathreview) — an AI-powered portfolio review assistant. Authored a curated 31-fixture red-team corpus for the existing `PromptDefense` safety layer, a parametrized `tests/security/` test suite, and a new unconditional `test-security` CI job, so future changes to `safety/` can't silently weaken the injection defense. ([PR #1016](https://github.com/ascherj/pathreview/pull/1016)) |
+| **Technical concepts** | White-box fixture design (regex-driven case selection, boundary probing, whitespace/case variants) · threat-model-driven corpus sourcing (attacks styled as PathReview's real ingestion surfaces: resume fields, README snippets, GitHub bios) · `pytest.mark.parametrize` with deterministic sorted-glob fixture discovery · `known_gaps` fixtures that explicitly document a real leading-`\n` detection bypass rather than hiding it · extending GitHub Actions CI with a path-independent security job · investigative findings: `PromptDefense` is fully tested but never wired into the live app (documented, not fixed, per issue scope) |
+| **Stack** | Python 3.11 · pytest · GitHub Actions · `safety/prompt_defense.py` (PathReview upstream) · pre-commit (`ruff`, `black`, `mypy`) |
+
+---
+
 ## Quick Start
 
 Each project is self-contained with its own `requirements.txt` and `.env.example`.
@@ -139,8 +153,11 @@ CodePath AI201/
 │   ├── Lab-5/        # BookClub — Flask + SQLAlchemy reading tracker
 │   └── Project-5/    # Mixtape Bug Hunt — service-layer debugging exercise
 │
-└── Week-6/
-    └── Project-6/    # CineLog — simulated OSS code review (watchlist feature)
+├── Week-6/
+│   └── Project-6/    # CineLog — simulated OSS code review (watchlist feature)
+│
+└── Week-7/
+    └── Project-7/    # PathReview — AI safety red-team suite (Tier 3 OSS contribution)
 ```
 
 ---
